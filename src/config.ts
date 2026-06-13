@@ -8,10 +8,9 @@ function envAddr(name: string, fallback: string): Address {
 }
 
 export const config = {
-  // Base Sepolia RPC the gateway reads the L2 records from.
-  l2RpcUrl:
-    process.env.L2_RPC_URL ??
-    "https://base-sepolia.g.alchemy.com/v2/C5BdobTzYALqWfs3wDc-I",
+  // Base Sepolia RPC the gateway reads the L2 records from. Defaults to the
+  // public endpoint; override with L2_RPC_URL for a higher-throughput provider.
+  l2RpcUrl: process.env.L2_RPC_URL ?? "https://sepolia.base.org",
 
   // Live Base Sepolia contracts (chain 84532).
   l2RegistryAddress: envAddr(
