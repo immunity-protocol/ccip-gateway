@@ -35,6 +35,22 @@ async function handle(sender: string, data: string, res: Response): Promise<void
 
 export function makeApp() {
   const app = express();
+
+  // CORS: ENS apps (explorer.ens.dev, the manager, wallets) fetch this gateway
+  // straight from the browser during CCIP-Read, so allow any origin. It is a
+  // read-only, signature-bearing public endpoint — nothing here is origin-gated.
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+    res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+    res.setHeader("Access-Control-Max-Age", "86400");
+    if (req.method === "OPTIONS") {
+      res.status(204).end();
+      return;
+    }
+    next();
+  });
+
   app.use(express.json());
 
   app.get("/", (_req, res) => {
